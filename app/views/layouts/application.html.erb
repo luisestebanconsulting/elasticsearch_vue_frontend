@@ -7,6 +7,14 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <!-- COMPONENTS -->
+    <% %w{datetime search_button interval url_list chart}.each do |component| %>
+      <%= javascript_pack_tag    "components/#{component}" %>
+      <%= stylesheet_pack_tag    "components/#{component}" %>
+    <% end %>
+
+    <%= javascript_pack_tag    'main' %>
   </head>
 
   <body>
