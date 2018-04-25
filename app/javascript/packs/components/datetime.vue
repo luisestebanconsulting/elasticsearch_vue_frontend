@@ -20,23 +20,34 @@ Props:
       type="date"
       :id="name.toLowerCase()+'_date'"
       :name="name.toLowerCase()+'_date'"
-      :value="date_to_YYYYMMDD(selected_datetime)"
+      v-model="selected_date"
     >
     <input
       type="time"
       :id="name.toLowerCase()+'_time'"
       :name="name.toLowerCase()+'_time'"
-      :value="date_to_HHMMSS(selected_datetime)"
+      v-model="selected_time"
     >
   </section>
 </template>
 
+      :value="date_to_YYYYMMDD(selected_datetime)"
+      :value="date_to_HHMMSS(selected_datetime)"
 <script>
   module.exports = {
     props: ['name','date','time'],
     data(){
       return {
+        selected_date:      null,
+        selected_time:      null,
         selected_datetime:  new Date(),
+      }
+    },
+    computed:{
+      as_milliseconds(){
+        this.combine();
+        offset = this.selected_datetime.getTimezoneOffset() * 60 * 1000;  // minutes to milliseconds
+        return   this.selected_datetime.getTime() - offset;               // zoneless
       }
     },
     mounted(){
@@ -51,6 +62,7 @@ Props:
           parseInt("0"+time[2])
         );
       }
+      this.separate();
       window.components[this.name || 'datetime'] = this;
     },
     methods: {
@@ -77,6 +89,19 @@ Props:
         ss   = ("0"+date.getSeconds()).slice(-2);
         
         return [hh,mm,ss].join(':');
+      },
+      combine(){
+        this.selected_datetime = new Date(this.selected_date);
+        time = this.selected_time.split(':');
+        this.selected_datetime.setHours(
+          parseInt("0"+time[0]),
+          parseInt("0"+time[1]),
+          parseInt("0"+time[2])
+        );
+      },
+      separate(){
+        this.selected_date = this.date_to_YYYYMMDD(this.selected_datetime);
+        this.selected_time = this.date_to_HHMMSS(this.selected_datetime);
       },
     },
   }

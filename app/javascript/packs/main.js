@@ -12,6 +12,14 @@ import App from '../app.vue'
 Vue.component('app',            App);
 
 
+// Use Axios for sending AJAX requests
+import axios from 'axios'
+
+window.axios = require('axios');
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+Vue.prototype.$http = window.axios
+
+
 // ---- Components ----
 var Components = Components || {};
 window.components = Components;

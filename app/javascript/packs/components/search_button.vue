@@ -18,19 +18,24 @@ Implements a button to trigger a search.
   module.exports = {
     methods: {
       search: function(){
-        console.log('SEARCH ...');
-        console.log('  FROM     = ' + $('#from_date').val() + " " + $('#from_time').val());
-        console.log('  TO       = ' + $('#to_date'  ).val() + " " + $('#to_time'  ).val());
-        console.log('  INTERVAL = ' + $('#scale'    ).val() +       $('#units'    ).val());
-        console.log('  URL_LIST = ' + $('#url_list' ).val());
-        $('#chart_output').text(
-          JSON.stringify({
-            after:      window.components["From"].selected_datetime.toJSON(),
-            before:     window.components["To"  ].selected_datetime.toJSON(),
-            interval:   window.components["interval"].interval,
-            urls:       window.components["url_list"].list,
-          })
-        );
+        // ---- Send Search Query ----
+        axios.post('http://localhost:3000/page_views',
+          {
+            urls:       window.components.url_list.list,
+            after:      window.components.From.as_milliseconds,
+            before:     window.components.To.as_milliseconds,
+            interval:   window.components.interval.interval
+          }
+        ).then(function (response) {
+          // ---- Display Query Results ----
+          results = response.data;
+          $('#chart_output').text(
+            JSON.stringify(results)
+          );
+        }).catch(function (error) {
+          console.log('ERROR');
+          console.log(error);
+        });
       }
     }
   }

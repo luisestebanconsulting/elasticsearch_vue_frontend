@@ -16,11 +16,7 @@ Props:
     <label for="url_list">
       URL List
     </label><br>
-    <textarea id="url_list" name="url_list">http://www.news.com.au/travel/travel-updates/incidents/disruptive-passenger-grounds-flight-after-storming-cockpit/news-story/5949c1e9542df41fb89e6cdcdc16b615
-http://www.smh.com.au/sport/tennis/an-open-letter-from-martina-navratilova-to-margaret-court-arena-20170601-gwhuyx.html
-http://www.smh.com.au/nsw/premier-gladys-berejiklian-announces-housing-affordability-reforms-20170601-gwi0jn.html
-http://www.news.com.au/technology/environment/trump-pulls-us-out-of-paris-climate-agreement/news-story/f5c30a07c595a10a81d67611d0515a0a
-</textarea>
+    <textarea id="url_list" name="url_list" v-model="text"></textarea>
   </section>
 </template>
 
@@ -28,12 +24,13 @@ http://www.news.com.au/technology/environment/trump-pulls-us-out-of-paris-climat
   module.exports = {
     data: function(){
       return {
+        text:     '',
       }
     },
     props: ['name'],
     computed:{
         list(){
-            return $("#url_list").val();
+            return this.text;
         },
     },
     mounted(){
