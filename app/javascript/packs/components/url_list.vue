@@ -14,7 +14,7 @@ Props:
 <template>
   <section>
     <label for="url_list">
-      URL List
+      URL List (include only these; empty means include all)
     </label><br>
     <textarea id="url_list" name="url_list" v-model="text"></textarea>
   </section>

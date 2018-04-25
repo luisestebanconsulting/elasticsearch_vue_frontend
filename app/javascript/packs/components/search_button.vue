@@ -6,10 +6,14 @@
 
 
 Implements a button to trigger a search.
+
+The search query is packaged from the input components and
+the results are passed to the histogram chart to be rendered.
 -->
 
 <template>
   <section>
+    <label id="search_spinner" style="display: none;">Searching ...</label>
     <button @click="search">Search</button>
   </section>
 </template>
@@ -19,6 +23,9 @@ Implements a button to trigger a search.
     methods: {
       search: function(){
         // ---- Send Search Query ----
+        $('#search_spinner').show();
+        window.components.histogram.clear();
+        
         axios.post('http://localhost:3000/page_views',
           {
             urls:       window.components.url_list.list,
@@ -29,12 +36,12 @@ Implements a button to trigger a search.
         ).then(function (response) {
           // ---- Display Query Results ----
           results = response.data;
-          $('#chart_output').text(
-            JSON.stringify(results)
-          );
+          window.components.histogram.render(results);
+          $('#search_spinner').hide();
         }).catch(function (error) {
-          console.log('ERROR');
-          console.log(error);
+          // ---- Display Query Error ----
+          window.components.histogram.error(error);
+          $('#search_spinner').hide();
         });
       }
     }
@@ -48,5 +55,6 @@ Implements a button to trigger a search.
     display:                flex;
     flex-direction:         row;
     justify-content:        flex-end;
+    align-items:            center;
   }
 </style>
